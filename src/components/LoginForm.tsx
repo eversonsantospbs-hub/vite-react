@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { Scissors } from 'lucide-react';
@@ -22,7 +22,8 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const [error, setError] = useState('');
   const [isRegistering, setIsRegistering] = useState(false); // Estado para alternar entre login e cadastro
-  const { login, registerUser } = useAuth(); // Adicione registerUser ao contexto de autenticação
+  const { login, registerUser } = useAuth(); // Funções de login e registro do contexto de autenticação
+
   const {
     register,
     handleSubmit,
@@ -35,17 +36,16 @@ export function LoginForm() {
     setError('');
 
     if (isRegistering) {
-      // Lógica para cadastro
-      const success = registerUser(data.username, data.password); // Chame a função de cadastro
+      // Lógica de cadastro
+      const success = registerUser(data.username, data.password); // Tente registrar o usuário
 
       if (!success) {
         setError('Erro ao cadastrar. Tente novamente.');
       } else {
-        // Opcional: redirecionar para a tela de login após o registro
-        setIsRegistering(false);
+        setIsRegistering(false); // Voltar para o modo de login após o cadastro
       }
     } else {
-      // Lógica para login
+      // Lógica de login
       const success = login(data.username, data.password);
       
       if (!success) {
@@ -111,4 +111,10 @@ export function LoginForm() {
               className="w-full bg-pink-600 hover:bg-red-700"
               disabled={isSubmitting}
             >
-              {isSubmitting ? (isRegistering ? 'Cadastr
+              {isSubmitting ? (isRegistering ? 'Cadastrando...' : 'Entrando...') : (isRegistering ? 'Cadastrar' : 'Entrar')}
+            </Button>
+
+            {/* Alternar entre Login e Cadastro */}
+            <div className="mt-4 text-center">
+              <button
+                type="button
