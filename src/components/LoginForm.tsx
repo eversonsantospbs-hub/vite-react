@@ -60,7 +60,7 @@ export function LoginForm() {
             BARBEARIA LIDER
           </CardTitle>
           <CardDescription>
-            Sistema de Gestão do Salão
+            Sistema Gestão do Salão
           </CardDescription>
         </CardHeader>
         <CardContent>
