@@ -35,6 +35,7 @@ export function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     setError('');
 
+    // Verifica se está no modo de registro
     if (isRegistering) {
       // Lógica de cadastro
       const success = registerUser(data.username, data.password); // Tente registrar o usuário
@@ -42,7 +43,8 @@ export function LoginForm() {
       if (!success) {
         setError('Erro ao cadastrar. Tente novamente.');
       } else {
-        setIsRegistering(false); // Voltar para o modo de login após o cadastro
+        // Reserva: Voltar para o modo de login após o cadastro
+        setIsRegistering(false);
       }
     } else {
       // Lógica de login
@@ -113,8 +115,9 @@ export function LoginForm() {
             >
               {isSubmitting ? (isRegistering ? 'Cadastrando...' : 'Entrando...') : (isRegistering ? 'Cadastrar' : 'Entrar')}
             </Button>
+          </form>
 
-            {/* Alternar entre Login e Cadastro */}
-            <div className="mt-4 text-center">
-              <button
-                type="button
+          <div className="mt-4 text-center">
+            <Button
+              type="button"
+              onClick={() => set
