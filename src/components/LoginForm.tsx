@@ -51,7 +51,7 @@ export function LoginForm() {
             </div>
           </div>
           <CardTitle className="text-2xl font-bold text-gray-900">
-            Só Elas Studio
+            BARBEARIA LIDER
           </CardTitle>
           <CardDescription>
             Sistema de Gestão do Salão
@@ -95,7 +95,7 @@ export function LoginForm() {
 
             <Button 
               type="submit" 
-              className="w-full bg-pink-600 hover:bg-pink-700"
+              className="w-full bg-pink-600 hover:bg-red-700"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Entrando...' : 'Entrar'}
