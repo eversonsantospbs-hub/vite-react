@@ -21,7 +21,6 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const [error, setError] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false); // Estado para alternar entre login e cadastro
   const { login, registerUser } = useAuth(); // Funções de login e registro do contexto de autenticação
 
   const {
@@ -35,24 +34,16 @@ export function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     setError('');
 
-    // Verifica se está no modo de registro
-    if (isRegistering) {
-      // Lógica de cadastro
-      const success = registerUser(data.username, data.password); // Tente registrar o usuário
-
-      if (!success) {
-        setError('Erro ao cadastrar. Tente novamente.');
-      } else {
-        // Reserva: Voltar para o modo de login após o cadastro
-        setIsRegistering(false);
-      }
-    } else {
-      // Lógica de login
-      const success = login(data.username, data.password);
-      
-      if (!success) {
+    // Tenta registrar o usuário
+    const registrationSuccess = registerUser(data.username, data.password);
+    if (!registrationSuccess) {
+      // Se o cadastro falhar, tenta fazer login
+      const loginSuccess = login(data.username, data.password);
+      if (!loginSuccess) {
         setError('Credenciais inválidas. Tente novamente.');
       }
+    } else {
+      setError('Usuário cadastrado com sucesso! Você já pode fazer login.');
     }
   };
 
@@ -113,11 +104,16 @@ export function LoginForm() {
               className="w-full bg-pink-600 hover:bg-red-700"
               disabled={isSubmitting}
             >
-              {isSubmitting ? (isRegistering ? 'Cadastrando...' : 'Entrando...') : (isRegistering ? 'Cadastrar' : 'Entrar')}
+              {isSubmitting ? 'Processando...' : 'Cadastrar / Entrar'}
             </Button>
           </form>
 
-          <div className="mt-4 text-center">
-            <Button
-              type="button"
-              onClick={() => set
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-600 text-center">
+              <strong>Credenciais de acesso:</strong><br />
+              Usuário: admin<br />
+              Senha: salao123
+            </p>
+          </div>
+        </CardContent>
+     
