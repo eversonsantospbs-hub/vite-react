@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { Scissors } from 'lucide-react';
@@ -21,8 +21,8 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const [error, setError] = useState('');
-  const { login } = useAuth();
-
+  const [isRegistering, setIsRegistering] = useState(false); // Estado para alternar entre login e cadastro
+  const { login, registerUser } = useAuth(); // Adicione registerUser ao contexto de autenticação
   const {
     register,
     handleSubmit,
@@ -33,11 +33,24 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     setError('');
-    
-    const success = login(data.username, data.password);
-    
-    if (!success) {
-      setError('Credenciais inválidas. Tente novamente.');
+
+    if (isRegistering) {
+      // Lógica para cadastro
+      const success = registerUser(data.username, data.password); // Chame a função de cadastro
+
+      if (!success) {
+        setError('Erro ao cadastrar. Tente novamente.');
+      } else {
+        // Opcional: redirecionar para a tela de login após o registro
+        setIsRegistering(false);
+      }
+    } else {
+      // Lógica para login
+      const success = login(data.username, data.password);
+      
+      if (!success) {
+        setError('Credenciais inválidas. Tente novamente.');
+      }
     }
   };
 
@@ -98,19 +111,4 @@ export function LoginForm() {
               className="w-full bg-pink-600 hover:bg-red-700"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Entrando...' : 'Entrar'}
-            </Button>
-          </form>
-
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600 text-center">
-              <strong>Credenciais de acesso:</strong><br />
-              Usuário: admin<br />
-              Senha: salao123
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+              {isSubmitting ? (isRegistering ? 'Cadastr
